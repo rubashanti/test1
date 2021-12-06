@@ -5,6 +5,7 @@ phases:
     commands:
         - python -m pip install Flask
   build:
+    on-failure: ABORT 
     commands:
       - echo Build started on `date`
       - echo Compiling the Python code...
