@@ -6,7 +6,7 @@ phases:
         - python -m pip install Flask
   build:
     commands:
-      - echo Build started on `date`
+      - Build started on `date`ksjkdbal.sd 
       - echo Compiling the Python code...
       - python test_app.py
   post_build:
