@@ -2,8 +2,22 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      docker: 19
+      golang: latest
     commands:
-        - python -m pip install Flask
+      - BRANCH="$(echo $CODEBUILD_WEBHOOK_TRIGGER | cut -d '/' -f 2)"
+  pre_build:
+    on-failure: ABORT
+    commands:      
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - 'cd $HOME/.goenv && git pull --ff-only && cd -'
+      - 'goenv install 1.17.3'
+      - 'goenv local 1.17.3'
+      - cd $CODEBUILD_SRC_DIR/devutils/schemavalidator      
+      - go build .
+      - cd $CODEBUILD_SRC_DIR      
+      #- ./devutils/schemavalidator/validate_rules.sh "./gates/*/" "./gates/schema/gate_rules_schema.json"
   build:
     commands:
       - echo Build started on `date`
